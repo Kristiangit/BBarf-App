@@ -8,7 +8,7 @@ export default function Intro({ navigation }) {
   return (
       <SafeAreaView style={[styles.container, {backgroundColor: '#27272A',}]}>
         <Navbar />
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: '#FF10F080'}]}>
           <View style={[styles.textBubble, styles.border]}>
             <Text style={styles.bTitle} >Bli en BrainBarf-bruker!</Text>
           </View>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#501b88',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%'
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 12,
     maxWidth: '100%',
-    borderColor: '#461E71',
+    borderColor: '#000000',
     borderWidth: 3,
     margin: 25,
   },
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     margin: -50,
     borderRadius: 12,
-    borderColor: '#461E71',
+    borderColor: '#000000',
     borderWidth: 1,
     maxWidth: '75%',
   },
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   border: {
     // marginTop: 20,
     borderWidth: 5,
-    borderColor: "#352349",
+    borderColor: "#000000",
   }
   
 });

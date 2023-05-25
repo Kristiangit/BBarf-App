@@ -2,18 +2,18 @@ import { useState } from 'react';
 import { StyleSheet, Text, View, Button, Touchable, TouchableWithoutFeedback, TextInput, SafeAreaView } from 'react-native';
 import Navbar from '../components/Navbar';
 
+
+//login success
 const Success = async (navigation ) => {
+    // fixe jwt for auth og bruke keychain 
+
   var now = new Date().getTime();
-  const token = ["jwt-token", JSON.stringify("json.token")];
-  const auth = ["isAuth", JSON.stringify(true)];
-  const setup = ["setupTime", JSON.stringify(now)];
-  await AsyncStorage.multiSet([token, auth, setup]);
-  // console.log(await AsyncStorage.multiGet([token[0], auth[0], setup[0]]));
+
   navigation.navigate('Home');
 };
 
-
 export default function SignUp({ navigation }) {
+  const [nameInput, onChangeName] = useState('');
   const [mailInput, onChangeMail] = useState('');
   const [passInput, onChangePass] = useState('');
   const [repPassInput, onChangeRepPass] = useState('');
@@ -67,6 +67,7 @@ export default function SignUp({ navigation }) {
               <Text style={styles.linkText}>eller logge inn?</Text>
             </TouchableWithoutFeedback>
 
+            <TextInput style={styles.inpBubble} placeholder="Brukernavn" value={nameInput} onChangeText={onChangeName}></TextInput>
             <TextInput style={styles.inpBubble} placeholder="E-post" value={mailInput} onChangeText={onChangeMail}></TextInput>
             <TextInput style={styles.inpBubble} placeholder="Passord" secureTextEntry={true} value={passInput} onChangeText={onChangePass}></TextInput>
             <TextInput style={styles.inpBubble} placeholder="Gjenta passord" secureTextEntry={true} value={repPassInput} onChangeText={onChangeRepPass}></TextInput>
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     flexDirection: 'column',
-    backgroundColor: '#501b88',
+    backgroundColor: '#FF10FF80',
     alignItems: 'center',
     justifyContent: 'space-around',
   },
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#461E71',
+    backgroundColor: '#27272A',
     borderRadius: parseFloat("30%"),
     borderColor: '#27272A',
     borderWidth: 4,

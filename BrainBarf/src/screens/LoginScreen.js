@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button, Touchable, TouchableWithoutFeedback, TextInput, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableWithoutFeedback, TextInput, SafeAreaView } from 'react-native';
 import Navbar from '../components/Navbar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginSuccess = async (navigation ) => {
     var now = new Date().getTime();
     const token = ["jwt-token", JSON.stringify("json.token")];
     const auth = ["isAuth", JSON.stringify(true)];
     const setup = ["setupTime", JSON.stringify(now)];
-    await AsyncStorage.multiSet([token, auth, setup]);
-    // console.log(await AsyncStorage.multiGet([token[0], auth[0], setup[0]]));
+
     navigation.navigate('Home');
 };
 
@@ -92,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     flexDirection: 'column',
-    backgroundColor: '#501b88',
+    backgroundColor: '#FF10F080',
     alignItems: 'center',
     justifyContent: 'space-around',
   },
@@ -124,7 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#461E71',
+    backgroundColor: '#27272A',
     borderRadius: parseFloat("30%"),
     borderColor: '#27272A',
     borderWidth: 4,
