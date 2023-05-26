@@ -4,9 +4,6 @@ import Navbar from '../components/Navbar';
 
 const LoginSuccess = async (navigation ) => {
     var now = new Date().getTime();
-    const token = ["jwt-token", JSON.stringify("json.token")];
-    const auth = ["isAuth", JSON.stringify(true)];
-    const setup = ["setupTime", JSON.stringify(now)];
 
     navigation.navigate('Home');
 };
@@ -15,42 +12,62 @@ export default function Login({ navigation }) {
   const [mailInput, onChangeMail] = useState();
   const [passInput, onChangePass] = useState();
   const [error, setError] = useState();
-  console.log(mailInput)
   const handleSubmit = () => {
-    // console.log(mailInput)
-    // console.log(passInput)
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json")
-      fetch("http://localhost:3000/api/login", {
-          "method" : "POST",
-          "headers": headers,
-          "body": JSON.stringify({
-              "mail": mailInput,
-              "password": passInput,
-          }) // et javascript-object kan vi gjøre til JSON med json-stringify
-      }).then(function(response) {
-          // Håndterer responsen
-          // Vi henter ut json-bodyen i responsen med .json()
-          response.json().then(function(json) {
-            //let array = response
-            //console.log(response)
-            if (json.token == "bad"){
-              setError("Feil brukernavn eller passord")
-              //alert("oops, feil brukernavn eller passord")
-            }
-            else if(json.token == "feil mail"){
-              //console.log("feil ")
-              setError("Feil brukernavn eller passord")
-              //alert("oops, feil brukernavn eller passord")
-            }
-            else{
-              LoginSuccess(navigation, json);
-            };
-          })
-        });
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json")
+        fetch("http://localhost:3000/api/register", {
+            "method" : "POST",
+            "headers": headers,
+            "body": JSON.stringify({
+                "mail": mailInput,
+                "password": passInput,
+            }) // et javascript-object kan vi gjøre til JSON med json-stringify
+        }).then(function(response) {
+            response.json().then(function(json) {
+
+            // Håndterer responsen
+            // Vi henter ut json-bodyen i responsen med .json()
+                console.log(json)
+            })
+        }
+        )
+        
+        
+    };
+
+
+    // const headers = new Headers();
+    // headers.append("Content-Type", "application/json")
+    //   fetch("http://localhost:3000/api/login", {
+    //       "method" : "POST",
+    //       "headers": headers,
+    //       "body": JSON.stringify({
+    //           "mail": mailInput,
+    //           "password": passInput,
+    //       }) // et javascript-object kan vi gjøre til JSON med json-stringify
+    //   }).then(function(response) {
+    //       // Håndterer responsen
+    //       // Vi henter ut json-bodyen i responsen med .json()
+    //       response.json().then(function(json) {
+    //         //let array = response
+    //         //console.log(response)
+    //         if (json.token == "bad"){
+    //           setError("Feil brukernavn eller passord")
+    //           //alert("oops, feil brukernavn eller passord")
+    //         }
+    //         else if(json.token == "feil mail"){
+    //           //console.log("feil ")
+    //           setError("Feil brukernavn eller passord")
+    //           //alert("oops, feil brukernavn eller passord")
+    //         }
+    //         else{
+    //           LoginSuccess(navigation, json);
+    //         };
+    //       })
+    //     });
     // LoginSuccess(navigation)
-    console.log(error, "eeerror")
-  };
+    // console.log(error, "eeerror");
 
   return (
       <SafeAreaView style={styles.container}>

@@ -5,6 +5,10 @@ import Navbar from '../components/Navbar';
 
 
 export default function Intro({ navigation }) {
+
+    let today = new Date()
+    let datestring = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`
+    console.log(datestring)
   return (
       <SafeAreaView style={[styles.container, {backgroundColor: '#27272A',}]}>
         <Navbar />

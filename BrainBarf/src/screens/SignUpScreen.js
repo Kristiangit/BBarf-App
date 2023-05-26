@@ -1,62 +1,54 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button, Touchable, TouchableWithoutFeedback, TextInput, SafeAreaView } from 'react-native';
 import Navbar from '../components/Navbar';
-
+import * as Keychain from 'react-native-keychain';
+import * as jwt from 'jsonwebtoken';
+const CryptoJS = require("crypto-js");
 
 //login success
 const Success = async (navigation ) => {
-    // fixe jwt for auth og bruke keychain 
-
+    // fixe jwt for auth og bruke keychain
   var now = new Date().getTime();
 
   navigation.navigate('Home');
 };
 
 export default function SignUp({ navigation }) {
-  const [nameInput, onChangeName] = useState('');
-  const [mailInput, onChangeMail] = useState('');
-  const [passInput, onChangePass] = useState('');
-  const [repPassInput, onChangeRepPass] = useState('');
-  const [error, setError] = useState('');
+    const [nameInput, onChangeName] = useState('');
+    const [mailInput, onChangeMail] = useState('');
+    const [passInput, onChangePass] = useState('');
+    const [repPassInput, onChangeRepPass] = useState('');
+    const [error, setError] = useState('');
 
-  const submit = () => {
-    // Passer på at alle felt er fylt ut
-    if(mailInput === "") {
-      setError("Tom E-post");
-    } else if(passInput === "" || repPassInput === "") {
-      setError("Tomt Passord");
-    } else {
-      // Setter opp headers
-      const headers = new Headers();
-      headers.append("Content-Type", "application/json");
-        fetch("http://localhost:3000/api/reg", {
-          "method" : "POST",
-          "headers": headers,
-          "body": JSON.stringify({
-            "mail": mailInput,
-            "password": passInput,
-            "r_password": repPassInput
-          }) // et javascript-object kan vi gjøre til JSON med json-stringify
+    const checkSamePass = () => {
+        if (passInput === repPassInput){
+            
+        }
+    }
+
+    const handleSubmit = () => {
+
+    
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json")
+        fetch("http://localhost:3000/api/register", {
+            "method" : "POST",
+            "headers": headers,
+            "body": JSON.stringify({
+                "name": nameInput,
+                "mail": mailInput,
+                "password": passInput,
+            }) // et javascript-object kan vi gjøre til JSON med json-stringify
         }).then(function(response) {
-          // Vi henter ut json-bodyen i responsen med .json()
-          response.json().then(function(json) {
-            if(json.token == "ugyldig mail") {
-              setError("Ugyldig E-postadresse");
-            } else if(json.token == "Passord matcher ikke") {
-              setError("Passord er ikke like");
-            } else {
-              Success(navigation, json);
-              // localStorage.setItem("jwt-token", json.token);
-              // localStorage.setItem("isAuth", true);
-              // localStorage.setItem('setupTime', now);
-              // const token = localStorage.getItem('jwt-token');
-              // console.log(token);
-            };    
-          });
-        });
-      };
-      // console.log(error, "is tha error");
+            response.json().then(function(json) {
+
+            // Håndterer responsen
+            // Vi henter ut json-bodyen i responsen med .json()
+                console.log(json)
+            })
+        })
     };
+    
   return (
       <SafeAreaView style={styles.container}>
         <Navbar />
@@ -74,7 +66,7 @@ export default function SignUp({ navigation }) {
 
           </View>
 
-          <TouchableWithoutFeedback onPress={() => submit()} >
+          <TouchableWithoutFeedback onPress={() => handleSubmit()} >
             <View style={styles.darkBubble}>
               <Text style={styles.bTitle}>Lag en ny bruker!</Text>
             </View>

@@ -1,1 +1,1 @@
-const TokenKey = "NotrEallyseCretkeY"
+export const TokenKey = "NotrEallyseCretkeY";

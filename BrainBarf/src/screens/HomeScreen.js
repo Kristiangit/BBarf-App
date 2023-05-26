@@ -20,14 +20,4 @@ export default function Intro({ navigation }) {
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%'
-  },
-});
 
