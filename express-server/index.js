@@ -1,8 +1,8 @@
+import { TokenKey } from "./secrets";
 const express = require('express')
 const app = express()
 const port = 3000
-
-
+const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3').verbose();
 
 
@@ -10,7 +10,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 class Database {
     constructor() {
-        this.db = new sqlite3.Database('database.sqlite');
+        this.db = new sqlite3.Database('database.sql');
     }
 
     // create table if not exists
@@ -34,7 +34,6 @@ class Database {
                 mail TEXT,
                 password TEXT,
                 creationDate TEXT,
-                jwt TEXT,
                 )```);
         });
     }
@@ -46,6 +45,7 @@ class Database {
         });
     }
 
+
     // insert data into table lorem with info column value Ipsum 0 to Ipsum 9
     insertData() {
         this.db.serialize(() => {
@@ -56,8 +56,21 @@ class Database {
             stmt.finalize();
         });
     }
+    createUser(name, mail, password) {
+        
+        this.db.serialize(() => {
+            this.db.run("INSERT INTO user (name, mail, password, creationDate, jwt) VALUES (?,?)");
+        });
+    }
 
     // select all data from table lorem and print it to console
+    checkLogin(mail, user) {
+        this.db.serialize(() => {
+            this.db.run("SELECT rowid AS id, info FROM user", (err, row) => {
+                console.log(row.id + ": " + row.info);
+            });
+        });
+    }
     selectData() {
         this.db.serialize(() => {
             this.db.each("SELECT rowid AS id, info FROM lorem", (err, row) => {
@@ -104,7 +117,20 @@ const db = new Database();
 // database.selectDataFilter();
 // database.close();
 
-
+const generateToken = (user) => {
+    // Set the payload data for the token
+    const payload = {
+      userId: user.id,
+      username: user.username,
+      // Add additional data as needed
+    };
+  
+    // Sign the token with a secret key
+    const token = jwt.sign(payload, 'your_secret_key', { expiresIn: '1h' });
+  
+    return token;
+  };
+  
 
 app.get('/', (req, res) => {
     res.send('Your server obeys your every line!')
