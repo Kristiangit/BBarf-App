@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button, Touchable, TouchableWithoutFeedback, TextInput, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, TouchableWithoutFeedback, TextInput, SafeAreaView } from 'react-native';
 import Navbar from '../components/Navbar';
 import * as Keychain from 'react-native-keychain';
-import * as jwt from 'jsonwebtoken';
+// import * as jwt from 'jsonwebtoken';
 const CryptoJS = require("crypto-js");
+const EncryptionKey = CryptoJS.SHA256("EncryptionKey").toString();
 
-//login success
+
 const Success = async (navigation ) => {
     // fixe jwt for auth og bruke keychain
-  var now = new Date().getTime();
+    
 
-  navigation.navigate('Home');
+    navigation.navigate('Home');
 };
 
 export default function SignUp({ navigation }) {
@@ -22,13 +23,23 @@ export default function SignUp({ navigation }) {
 
     const checkSamePass = () => {
         if (passInput === repPassInput){
-            
-        }
+            return true;
+        } else {
+            return false;
+        };
     }
 
     const handleSubmit = () => {
-
-    
+        console.log("test")
+        if (!checkSamePass()) {
+            return;
+        }
+        const password = CryptoJS.SHA256(passInput).toString();
+        console.log("encryption")
+        const email = CryptoJS.AES.encrypt(mailInput, EncryptionKey).toString();
+        
+        console.log(email)
+        console.log(password)
         const headers = new Headers();
         headers.append("Content-Type", "application/json")
         fetch("http://localhost:3000/api/register", {
@@ -36,15 +47,18 @@ export default function SignUp({ navigation }) {
             "headers": headers,
             "body": JSON.stringify({
                 "name": nameInput,
-                "mail": mailInput,
-                "password": passInput,
+                "mail": email,
+                "password": password,
             }) // et javascript-object kan vi gjøre til JSON med json-stringify
         }).then(function(response) {
             response.json().then(function(json) {
 
             // Håndterer responsen
             // Vi henter ut json-bodyen i responsen med .json()
-                console.log(json)
+                console.log(json);
+                if (json.message == "user created"){
+                    Success(navigation);
+                }
             })
         })
     };
@@ -60,17 +74,17 @@ export default function SignUp({ navigation }) {
             </TouchableWithoutFeedback>
 
             <TextInput style={styles.inpBubble} placeholder="Brukernavn" value={nameInput} onChangeText={onChangeName}></TextInput>
-            <TextInput style={styles.inpBubble} placeholder="E-post" value={mailInput} onChangeText={onChangeMail}></TextInput>
+            <TextInput style={styles.inpBubble} placeholder="E-post" value={mailInput} onChangeText={onChangeMail} keyboardType='email-address'></TextInput>
             <TextInput style={styles.inpBubble} placeholder="Passord" secureTextEntry={true} value={passInput} onChangeText={onChangePass}></TextInput>
             <TextInput style={styles.inpBubble} placeholder="Gjenta passord" secureTextEntry={true} value={repPassInput} onChangeText={onChangeRepPass}></TextInput>
 
           </View>
 
-          <TouchableWithoutFeedback onPress={() => handleSubmit()} >
+          <TouchableOpacity onPress={() => handleSubmit()} >
             <View style={styles.darkBubble}>
               <Text style={styles.bTitle}>Lag en ny bruker!</Text>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
           <View></View>
         </View>
       </SafeAreaView>
