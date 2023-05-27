@@ -11,13 +11,20 @@ db = new sqlite3.Database('database.sqlite');
 
 function createTableUser() {
     db.serialize(function () {
-        // db.run("DROP TABLE IF EXISTS users");
         db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, mail TEXT, password TEXT, creationDate TEXT)`);
     });
 };
 
+
 function createUser(name, mail, password) {
-    
+    db.serialize(() => {
+        db.get(`SELECT name FROM users WHERE name = ?`, name, (err, row) => {
+            if (row !== undefined){
+                return;
+            };
+        });
+
+    });
     
     let today = new Date();
     let datestring = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
@@ -154,7 +161,8 @@ app.post("/api/register", (req, res) => {
 
     user_data = req.body;
     createUser(user_data.name, user_data.mail, user_data.password);
-    res.send({"message": "Hello World!"})
+
+    res.send({"message": "user created"})
 
 });
 
@@ -165,9 +173,5 @@ app.post("/api/login", (req, res) => {
         console.log(error, "error")
     }
 });
-app.get("/api/login", (req, res) => {
-    const data = { message: 'Hello, world!' };
-    res.json(data);
-});
 
-db.close();
+
